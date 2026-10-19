@@ -1,0 +1,517 @@
+/* ==========================================================================
+   SPOTIFY SOUNDLAB - DESIGN SYSTEM & COMPONENT STYLES
+   Engineered with Stitch Design System: SoundLab Sonic Intelligence
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. CSS Custom Properties / Design Tokens
+   -------------------------------------------------------------------------- */
+:root {
+  /* Surface & Background Spectrum */
+  --color-background: #131313;
+  --color-surface: #131313;
+  --color-surface-dim: #131313;
+  --color-surface-bright: #393939;
+  --color-surface-container-lowest: #0e0e0e;
+  --color-surface-container-low: #1c1b1b;
+  --color-surface-container: #201f1f;
+  --color-surface-container-high: #2a2a2a;
+  --color-surface-container-highest: #353534;
+  --color-surface-variant: #353534;
+  --color-inverse-surface: #e5e2e1;
+  --color-inverse-on-surface: #313030;
+
+  /* Typography / Content Colors */
+  --color-on-background: #e5e2e1;
+  --color-on-surface: #e5e2e1;
+  --color-on-surface-variant: #bccbb9;
+  --color-outline: #869585;
+  --color-outline-variant: #3d4a3d;
+
+  /* Brand Accents (Signature Neon Green) */
+  --color-primary: #53e076;
+  --color-primary-container: #1db954;
+  --color-primary-fixed: #72fe8f;
+  --color-primary-fixed-dim: #53e076;
+  --color-on-primary: #003914;
+  --color-on-primary-container: #004118;
+  --color-inverse-primary: #006e2d;
+
+  /* Secondary Accents (Electric Emerald) */
+  --color-secondary: #3de96f;
+  --color-secondary-container: #00cc57;
+  --color-secondary-fixed: #69ff89;
+  --color-secondary-fixed-dim: #34e36a;
+  --color-on-secondary: #003913;
+  --color-on-secondary-container: #004f1d;
+
+  /* Tertiary Accents (Sage & Forest) */
+  --color-tertiary: #9ad4a5;
+  --color-tertiary-container: #76ae82;
+  --color-tertiary-fixed: #b5f1c0;
+  --color-tertiary-fixed-dim: #9ad4a5;
+  --color-on-tertiary: #003919;
+  --color-on-tertiary-container: #05411f;
+
+  /* Error / Distortion Accents */
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error: #690005;
+  --color-on-error-container: #ffdad6;
+
+  /* Spacing Scale */
+  --space-2xs: 0.125rem;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --margin-desktop: 2.5rem;
+  --margin: 2rem;
+  --margin-mobile: 1rem;
+  --gutter-sm: 0.75rem;
+  --gutter: 1.25rem;
+  --gutter-lg: 1.75rem;
+
+  /* Font Families */
+  --font-primary: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* --------------------------------------------------------------------------
+   2. Global Baseline Reset & Typography
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-primary);
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-surface-container-lowest);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 9999px;
+  border: 2px solid #121212;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #53e076;
+}
+
+/* --------------------------------------------------------------------------
+   3. Custom Range Sliders (Tactile Studio Potentiometers)
+   -------------------------------------------------------------------------- */
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  width: 100%;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  height: 6px;
+  background: #181818;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.2s ease;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 18px;
+  width: 18px;
+  border-radius: 9999px;
+  background: #53e076;
+  border: 2px solid #131313;
+  box-shadow: 0 0 12px rgba(83, 224, 118, 0.65);
+  cursor: pointer;
+  margin-top: -6px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+  box-shadow: 0 0 20px rgba(83, 224, 118, 0.95);
+  background: #72fe8f;
+}
+
+input[type=range]::-moz-range-track {
+  height: 6px;
+  background: #181818;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+input[type=range]::-moz-range-thumb {
+  height: 18px;
+  width: 18px;
+  border-radius: 9999px;
+  background: #53e076;
+  border: 2px solid #131313;
+  box-shadow: 0 0 12px rgba(83, 224, 118, 0.65);
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   4. Glow Effects, Glassmorphism & Elevation
+   -------------------------------------------------------------------------- */
+.glow-emerald-ring {
+  box-shadow: 0 0 28px rgba(29, 185, 84, 0.3), inset 0 0 14px rgba(29, 185, 84, 0.1);
+}
+
+.glow-accent-btn {
+  box-shadow: 0 0 20px rgba(83, 224, 118, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glow-accent-btn:hover {
+  box-shadow: 0 0 32px rgba(83, 224, 118, 0.65);
+  transform: translateY(-1px);
+}
+
+.preset-pill {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.preset-pill.active {
+  background-color: #2a2a2a !important;
+  border-color: #1DB954 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 16px rgba(29, 185, 84, 0.45);
+}
+
+/* --------------------------------------------------------------------------
+   5. Dynamic Radar Chart & Gauge Styles
+   -------------------------------------------------------------------------- */
+#gaugeProgressCircle {
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+#radarPolygon {
+  transition: points 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   6. Micro-Animations & Telemetry Keyframes
+   -------------------------------------------------------------------------- */
+@keyframes audioPulse {
+  0%, 100% {
+    transform: scaleY(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scaleY(1.4);
+    opacity: 1;
+  }
+}
+
+.animate-audio-bar {
+  animation: audioPulse 1.2s ease-in-out infinite alternate;
+}
+
+/* Scale pop animation for CTA */
+.scale-110 {
+  transform: scale(1.1);
+  transition: transform 0.15s ease;
+}
+
+/* --------------------------------------------------------------------------
+   7. Typography Classes
+   -------------------------------------------------------------------------- */
+.font-telemetry-metric {
+  font-family: var(--font-mono);
+}
+
+.font-telemetry-label {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------------
+   8. Server Status Badges
+   -------------------------------------------------------------------------- */
+.status-pill-online {
+  background: rgba(83, 224, 118, 0.15);
+  border: 1px solid rgba(83, 224, 118, 0.4);
+  color: #53e076;
+}
+
+/* --------------------------------------------------------------------------
+   9. Spotify Catalogue Search Dropdown & Result Cards
+   -------------------------------------------------------------------------- */
+#searchResultsDropdown {
+  animation: searchFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(29, 185, 84, 0.15);
+}
+
+@keyframes searchFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-result-item {
+  transition: all 0.15s ease;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+}
+
+.search-result-item:hover,
+.search-result-item.selected {
+  background-color: #242424;
+  border-color: rgba(83, 224, 118, 0.35);
+  transform: translateX(2px);
+}
+
+.search-result-item.selected {
+  box-shadow: 0 0 12px rgba(83, 224, 118, 0.2);
+}
+
+.search-highlight {
+  color: #53e076;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.track-artwork-placeholder {
+  background: linear-gradient(135deg, #1c1b1b 0%, #2a2a2a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@keyframes fadeInBanner {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeInBanner 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   10. SoundLab Live Audio Player & Sticky Spotify Dock
+   -------------------------------------------------------------------------- */
+#spotifyDock {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.75), 0 0 24px rgba(29, 185, 84, 0.15);
+}
+
+#spotifyDock.collapsed {
+  transform: translateY(calc(100% - 10px));
+}
+
+.audio-progress-bar {
+  cursor: pointer;
+  height: 5px;
+  background: #2a2a2a;
+  border-radius: 9999px;
+  position: relative;
+  transition: height 0.15s ease;
+}
+
+.audio-progress-bar:hover {
+  height: 7px;
+}
+
+.audio-progress-fill {
+  background: linear-gradient(90deg, #1DB954 0%, #53e076 100%);
+  height: 100%;
+  border-radius: 9999px;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* Sound equalizing waves animation */
+@keyframes barBounce {
+  0%, 100% { height: 6px; }
+  50% { height: 22px; }
+}
+
+.live-bar {
+  animation: barBounce 0.8s ease-in-out infinite alternate;
+}
+.live-bar:nth-child(2) { animation-delay: 0.15s; }
+.live-bar:nth-child(3) { animation-delay: 0.3s; }
+.live-bar:nth-child(4) { animation-delay: 0.45s; }
+
+/* --------------------------------------------------------------------------
+   11. Librosa DSP Audio Telemetry & Signal Diagnostic Styles
+   -------------------------------------------------------------------------- */
+.dsp-stat-card {
+  background: linear-gradient(135deg, rgba(28, 27, 27, 0.8) 0%, rgba(14, 14, 14, 0.95) 100%);
+  border: 1px solid rgba(83, 224, 118, 0.2);
+  border-radius: 12px;
+  padding: 12px 14px;
+  transition: all 0.2s ease;
+}
+
+.dsp-stat-card:hover {
+  border-color: rgba(83, 224, 118, 0.5);
+  box-shadow: 0 4px 16px rgba(83, 224, 118, 0.12);
+}
+
+.dsp-value {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #53e076;
+}
+
+.dsp-label {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  color: var(--color-on-surface-variant);
+  letter-spacing: 0.05em;
+}
+
+/* Feature Completeness Meter */
+.completeness-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.completeness-full {
+  background: rgba(83, 224, 118, 0.15);
+  color: #53e076;
+  border: 1px solid rgba(83, 224, 118, 0.4);
+}
+
+.completeness-partial {
+  background: rgba(234, 179, 8, 0.15);
+  color: #eab308;
+  border: 1px solid rgba(234, 179, 8, 0.4);
+}
+
+/* Uncertainty Interval Callout */
+.ci-interval-box {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px dashed rgba(83, 224, 118, 0.3);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
+/* Listening Context Affinity Meter */
+.context-meter-fill {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #3de96f, #53e076);
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Audio Dropzone */
+.audio-dropzone {
+  border: 2px dashed rgba(83, 224, 118, 0.3);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  background: rgba(20, 20, 20, 0.6);
+  transition: all 0.2s ease;
+}
+
+.audio-dropzone:hover,
+.audio-dropzone.dragover {
+  border-color: #53e076;
+  background: rgba(83, 224, 118, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   10. Unified Header & Navigation Tab Styles
+   -------------------------------------------------------------------------- */
+.nav-tab {
+  color: var(--color-on-surface-variant);
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-tab:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.nav-tab.active {
+  background-color: rgba(83, 224, 118, 0.16);
+  border-color: rgba(83, 224, 118, 0.4);
+  color: var(--color-primary);
+  box-shadow: 0 0 14px rgba(83, 224, 118, 0.2);
+}
+
+/* Smooth anchor target offset for sticky header */
+#predictor,
+#audio-dsp,
+#retention-intelligence,
+#correlation {
+  scroll-margin-top: 5.5rem;
+}
+
+/* Header Search Container & Input Sizing */
+.header-search-container {
+  flex: 1 1 auto;
+  min-width: 260px;
+  max-width: 440px;
+  position: relative;
+}
+
+#searchInput {
+  width: 100% !important;
+  min-width: 260px;
+}
+
+
+

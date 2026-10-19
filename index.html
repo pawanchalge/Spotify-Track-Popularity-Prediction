@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Spotify SoundLab - Track Popularity Predictor &amp; Audio Analyzer</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  
+  <!-- External Stylesheet (Separated CSS) -->
+  <link rel="stylesheet" href="style.css"/>
+
+  <!-- Tailwind CSS Framework CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- External JavaScript Application (Separated JS) -->
+  <script src="app.js" defer></script>
+
+</head>
+<body class="bg-surface text-on-surface min-h-screen antialiased selection:bg-primary selection:text-surface-container-lowest">
+
+  <!-- ==================== TOP NAVIGATION ==================== -->
+  <header class="app-header w-full border-b border-outline-variant/30 bg-[#0e0e0e]/95 backdrop-blur-xl sticky top-0 z-50 shadow-xl transition-all">
+    <div class="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3 lg:gap-5">
+      
+      <!-- Left: Spotify SoundLab Brand Logo & Primary Navigation -->
+      <div class="flex items-center gap-3 lg:gap-5 shrink-0">
+        <a href="#" class="flex items-center gap-2.5 text-white hover:opacity-90 transition-opacity">
+          <svg class="w-8 h-8 text-primary shrink-0" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 0C5.372 0 0 5.372 0 12c0 6.626 5.372 12 12 12 6.626 0 12-5.374 12-12 0-6.628-5.374-12-12-12zm5.508 17.306c-.218.356-.68.472-1.036.254-2.836-1.732-6.406-2.124-10.61-1.164-.406.094-.808-.162-.902-.568-.094-.404.162-.806.568-.9 4.606-1.054 8.564-.606 11.726 1.342.356.218.472.68.254 1.036zm1.47-3.266c-.276.446-.86.588-1.306.312-3.244-1.994-8.192-2.57-12.03-1.404-.5.152-1.03-.134-1.182-.634-.152-.5.134-1.03.634-1.182 4.388-1.332 9.838-.688 13.572 1.602.446.276.588.86.312 1.306zm.126-3.41c-3.89-2.31-10.31-2.524-14.032-1.394-.596.182-1.228-.158-1.41-.754-.182-.596.158-1.228.754-1.41 4.282-1.3 11.368-1.044 15.844 1.614.536.318.71 1.012.392 1.548-.318.536-1.012.71-1.548.396z"></path>
+          </svg>
+          <div class="flex items-center gap-1.5">
+            <span class="tracking-tight text-white font-extrabold text-lg">Spotify</span>
+            <span class="tracking-tight text-primary font-bold text-lg">SoundLab</span>
+          </div>
+        </a>
+        <span class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high border border-outline-variant/40 text-[10px] font-telemetry-label text-primary font-bold uppercase tracking-wider">
+          Studio
+        </span>
+
+        <!-- Vertical Divider -->
+        <div class="hidden xl:block h-5 w-px bg-outline-variant/40"></div>
+
+        <!-- Integrated Header Navigation Tabs -->
+        <nav class="hidden lg:flex items-center gap-1 bg-surface-container/70 p-1 rounded-full border border-outline-variant/30">
+          <a href="#predictor" class="nav-tab active px-3 py-1 rounded-full text-caption font-semibold flex items-center gap-1.5 whitespace-nowrap transition-all">
+            <span class="material-symbols-outlined text-[15px]">tune</span>
+            <span>Predictor</span>
+          </a>
+          <a href="#audio-dsp" class="nav-tab px-3 py-1 rounded-full text-caption font-medium flex items-center gap-1.5 whitespace-nowrap transition-all">
+            <span class="material-symbols-outlined text-[15px]">graphic_eq</span>
+            <span>Signal (DSP)</span>
+          </a>
+          <a href="#retention-intelligence" class="nav-tab px-3 py-1 rounded-full text-caption font-medium flex items-center gap-1.5 whitespace-nowrap transition-all">
+            <span class="material-symbols-outlined text-[15px]">timer</span>
+            <span>Retention</span>
+          </a>
+          <a href="#correlation" class="nav-tab px-3 py-1 rounded-full text-caption font-medium flex items-center gap-1.5 whitespace-nowrap transition-all">
+            <span class="material-symbols-outlined text-[15px]">bubble_chart</span>
+            <span>Correlations</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Center: Prominent Catalogue Search Bar -->
+      <div class="header-search-container mx-2 lg:mx-4">
+        <div class="relative w-full">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
+            <span class="material-symbols-outlined text-[17px]">search</span>
+          </div>
+          <input id="searchInput" class="w-full bg-surface-container-low/90 hover:bg-surface-container border border-outline-variant/30 focus:border-primary/80 rounded-full pl-9 pr-14 py-1.5 text-body-sm text-white placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all shadow-inner" placeholder="Search 114k catalogue..." type="text" autocomplete="off"/>
+          
+          <!-- Clear search button -->
+          <button id="clearSearchBtn" class="hidden absolute inset-y-0 right-9 pr-1 flex items-center text-on-surface-variant hover:text-white transition-colors" title="Clear search">
+            <span class="material-symbols-outlined text-[15px]">close</span>
+          </button>
+
+          <div class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
+            <kbd class="bg-surface-container-high border border-outline-variant/50 text-on-surface-variant rounded px-1.5 py-0.5 text-[9px] font-telemetry-label">⌘K</kbd>
+          </div>
+
+          <!-- Catalogue Search Results Dropdown -->
+          <div id="searchResultsDropdown" class="hidden absolute left-0 right-0 top-full mt-2 bg-surface-container-low/95 backdrop-blur-xl border border-outline-variant/50 rounded-2xl shadow-2xl overflow-hidden z-50 max-h-[460px] flex flex-col">
+            <div id="searchDropdownHeader" class="px-3.5 py-2 border-b border-outline-variant/20 flex items-center justify-between text-[11px] font-telemetry-label text-on-surface-variant bg-surface-container-lowest/80">
+              <span id="searchStatusText">SPOTIFY CATALOGUE MATCHES</span>
+              <span id="searchResultCount" class="text-primary font-bold">0 found</span>
+            </div>
+            <div id="searchResultsList" class="overflow-y-auto divide-y divide-outline-variant/15 p-1.5 space-y-1 max-h-[360px]">
+              <!-- Results injected dynamically -->
+            </div>
+            <div class="px-3.5 py-2 border-t border-outline-variant/20 bg-surface-container-lowest/80 flex items-center justify-between text-[10px] text-on-surface-variant/80">
+              <span>Click any track to ingest audio features</span>
+              <div class="flex items-center gap-1.5">
+                <kbd class="bg-surface-container px-1 py-0.5 rounded border border-outline-variant/40">↑</kbd>
+                <kbd class="bg-surface-container px-1 py-0.5 rounded border border-outline-variant/40">↓</kbd>
+                <span>navigate</span>
+                <kbd class="bg-surface-container px-1 py-0.5 rounded border border-outline-variant/40">↵</kbd>
+                <span>select</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Live Status, External Link, Export & Compute -->
+      <div class="flex items-center gap-2 lg:gap-2.5 shrink-0">
+        <!-- XGBoost Live Indicator -->
+        <div class="hidden 2xl:flex items-center gap-2 bg-surface-container-low border border-outline-variant/30 rounded-full px-3 py-1">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+          </span>
+          <span class="text-caption font-telemetry-label text-on-surface-variant uppercase tracking-wider text-[10px]">XGBoost Live</span>
+        </div>
+
+        <!-- Streamlit Studio Suite (Polished Pill) -->
+        <a href="http://localhost:8501" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high border border-outline-variant/40 hover:border-primary/50 text-white text-caption font-medium transition-all" title="Open Streamlit ML Suite">
+          <span class="material-symbols-outlined text-[14px] text-primary">open_in_new</span>
+          <span>Streamlit Lab</span>
+        </a>
+
+        <!-- Export Snapshot Button -->
+        <button id="exportBtn" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high border border-outline-variant/40 hover:border-primary/50 text-white text-caption font-medium transition-all" title="Export telemetry snapshot">
+          <span class="material-symbols-outlined text-[15px]">ios_share</span>
+          <span class="hidden md:inline">Export</span>
+        </button>
+
+        <!-- Compute Popularity Score CTA -->
+        <button id="runPredictBtn" class="glow-accent-btn inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary hover:bg-primary-fixed text-on-primary font-bold text-caption transition-all transform active:scale-95 shadow-md" title="Calculate Live Popularity Score">
+          <span class="material-symbols-outlined text-[16px]">bolt</span>
+          <span>Compute</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CANVAS ==================== -->
+  <main class="max-w-[1720px] mx-auto px-margin-desktop py-space-md space-y-space-md pb-28">
+
+    <!-- Ingested Track Banner (Shown when searching/selecting from 114k catalogue) -->
+    <div id="loadedTrackBanner" class="hidden bg-gradient-to-r from-primary-container/20 via-surface-container-high to-surface-container border border-primary/40 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 shadow-lg transition-all animate-fadeIn">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-surface-container-lowest border border-primary/30 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-primary text-[22px]">album</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="loadedTrackTitle" class="text-white font-bold text-sm">Track Title</span>
+              <span id="loadedTrackGenre" class="bg-primary/20 text-primary border border-primary/40 px-2 py-0.5 rounded text-[10px] font-telemetry-label uppercase">pop</span>
+              <span class="text-caption text-primary font-telemetry-label text-[10px] flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                CATALOGUE INGESTED
+              </span>
+            </div>
+            <div class="text-caption text-on-surface-variant flex items-center gap-2 mt-0.5">
+              <span>Artist: <strong id="loadedTrackArtist" class="text-white">Artist</strong></span>
+              <span>•</span>
+              <span>Album: <span id="loadedTrackAlbum" class="text-on-surface">Album</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="text-right">
+            <div class="text-[10px] uppercase font-telemetry-label text-on-surface-variant">Spotify Actual vs Predict</div>
+            <div class="flex items-center gap-2 justify-end">
+              <span class="text-caption text-on-surface-variant">Actual: <strong id="loadedActualScore" class="text-primary font-bold">85</strong></span>
+              <span class="text-caption text-on-surface-variant">Predict: <strong id="loadedPredictedScore" class="text-white font-bold">82</strong></span>
+              <span id="loadedAccuracyBadge" class="bg-primary/15 border border-primary/30 text-primary text-[10px] font-telemetry-label px-1.5 py-0.5 rounded">Δ -3 pts (96.5% match)</span>
+            </div>
+          </div>
+          
+          <!-- Direct Play Buttons -->
+          <div class="flex items-center gap-2">
+            <button id="bannerPlayBtn" class="px-3.5 py-1.5 rounded-full bg-primary hover:bg-primary-fixed text-on-primary font-bold text-caption flex items-center gap-1.5 transition-all shadow-md active:scale-95" title="Play audio preview">
+              <span class="material-symbols-outlined text-[16px]">play_arrow</span>
+              <span>Play Audio</span>
+            </button>
+            <a id="bannerSpotifyLink" href="https://open.spotify.com" target="_blank" class="px-3 py-1.5 rounded-full bg-[#1ed760]/15 border border-[#1ed760]/40 text-[#1ed760] hover:bg-[#1ed760]/25 font-semibold text-caption flex items-center gap-1.5 transition-all" title="Listen on Spotify">
+              <svg class="w-3.5 h-3.5 fill-current shrink-0" viewBox="0 0 24 24"><path d="M12 0C5.372 0 0 5.372 0 12c0 6.626 5.372 12 12 12 6.626 0 12-5.374 12-12 0-6.628-5.374-12-12-12zm5.508 17.306c-.218.356-.68.472-1.036.254-2.836-1.732-6.406-2.124-10.61-1.164-.406.094-.808-.162-.902-.568-.094-.404.162-.806.568-.9 4.606-1.054 8.564-.606 11.726 1.342.356.218.472.68.254 1.036zm1.47-3.266c-.276.446-.86.588-1.306.312-3.244-1.994-8.192-2.57-12.03-1.404-.5.152-1.03-.134-1.182-.634-.152-.5.134-1.03.634-1.182 4.388-1.332 9.838-.688 13.572 1.602.446.276.588.86.312 1.306zm.126-3.41c-3.89-2.31-10.31-2.524-14.032-1.394-.596.182-1.228-.158-1.41-.754-.182-.596.158-1.228.754-1.41 4.282-1.3 11.368-1.044 15.844 1.614.536.318.71 1.012.392 1.548-.318.536-1.012.71-1.548.396z"/></svg>
+              <span>Spotify</span>
+            </a>
+            <button id="clearLoadedTrackBtn" class="px-2.5 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-highest border border-outline-variant/30 text-caption text-on-surface hover:text-white transition-all flex items-center gap-1" title="Reset">
+              <span class="material-symbols-outlined text-[14px]">close</span>
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
+    <!-- ==================== SPLIT CONSOLE: INTERACTIVE PREDICTION ==================== -->
+    <div id="predictor" class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg scroll-mt-20">
+      
+      <!-- LEFT / CENTRAL PANEL: ACOUSTIC FEATURE TUNER (7 Columns) -->
+      <section class="xl:col-span-7 bg-surface-container-low border border-outline-variant/30 rounded-2xl p-space-lg shadow-xl relative backdrop-blur-md">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-space-md border-b border-outline-variant/20 mb-space-md">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[22px]">tune</span>
+            <div>
+              <h2 class="text-title-md text-white font-bold leading-tight">Acoustic Feature Controls</h2>
+              <p class="text-caption text-on-surface-variant text-[11px]">Dial features manually or load genre presets</p>
+            </div>
+          </div>
+
+          <!-- Archetype Presets & Reset Group -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <div class="flex items-center gap-1 bg-surface-container-lowest/90 p-1 rounded-xl border border-outline-variant/30 shadow-inner">
+              <span class="text-[10px] font-telemetry-label uppercase tracking-wider text-on-surface-variant/80 px-1.5 hidden md:inline">Presets:</span>
+              <button data-preset="pop" class="preset-pill active px-2.5 py-1 rounded-lg text-white text-caption font-semibold flex items-center gap-1 transition-all" title="Load Mainstream Pop Archetype">
+                <span>Pop</span>
+              </button>
+              <button data-preset="indie" class="preset-pill px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-white text-caption font-medium flex items-center gap-1 transition-all" title="Load Indie Folk Archetype">
+                <span>Indie</span>
+              </button>
+              <button data-preset="edm" class="preset-pill px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-white text-caption font-medium flex items-center gap-1 transition-all" title="Load Festival EDM Archetype">
+                <span>EDM</span>
+              </button>
+              <button data-preset="jazz" class="preset-pill px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-white text-caption font-medium flex items-center gap-1 transition-all" title="Load Jazz / Acoustic Archetype">
+                <span>Jazz</span>
+              </button>
+              <button data-preset="trap" class="preset-pill px-2.5 py-1 rounded-lg text-on-surface-variant hover:text-white text-caption font-medium flex items-center gap-1 transition-all" title="Load Modern 808 Trap Archetype">
+                <span>Trap</span>
+              </button>
+            </div>
+
+            <button id="resetDefaultsBtn" class="text-caption text-on-surface-variant hover:text-primary flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-surface-container border border-outline-variant/30 hover:border-primary/40 transition-colors" title="Reset all sliders to default">
+              <span class="material-symbols-outlined text-[15px]">restart_alt</span>
+              <span class="hidden sm:inline">Reset</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Two Column Acoustic Feature Sliders Matrix -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-space-md gap-y-space-sm">
+          
+          <!-- 1. Danceability -->
+          <div class="bg-surface-container/60 border border-outline-variant/20 rounded-xl p-3 space-y-2 hover:border-outline-variant/50 transition-all">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-1.5 text-body-sm font-medium text-white">
+                <span class="material-symbols-outlined text-primary text-[18px]">nightlife</span>
+                Danceability
+              </label>
+              <span id="badge-danceability" class="text-telemetry-label text-primary bg-surface-container-lowest border border-outline-variant/40 px-2 py-0.5 rounded text-[11px]">
+                0.78
+              </span>
+            </div>
+            <input id="slider-danceability" class="w-full" max="1" min="0" step="0.01" type="range" value="0.78"/>
+          </div>
+
+          <!-- 2. Energy -->
+          <div class="bg-surface-container/60 border border-outline-variant/20 rounded-xl p-3 space-y-2 hover:border-outline-variant/50 transition-all">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-1.5 text-body-sm font-medium text-white">
+                <span class="material-symbols-outlined text-secondary text-[18px]">electric_bolt</span>
+                Energy
+              </label>
+              <span id="badge-energy" class="text-telemetry-label text-secondary bg-surface-container-lowest border border-outline-variant/40 px-2 py-0.5 rounded text-[11px]">
+                0.85
+              </span>
+            </div>
+            <input id="slider-energy" class="w-full" max="1" min="0" step="0.01" type="range" value="0.85"/>
+          </div>
+
+          <!-- 3. Loudness (dB) -->
+          <div class="bg-surface-container/60 border border-outline-variant/20 rounded-xl p-3 space-y-2 hover:border-outline-variant/50 transition-all">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-1.5 text-body-sm font-medium text-white">
+                <span class="material-symbols-outlined text-primary text-[18px]">volume_up</span>
+                Loudness (dB)
+              </label>
+              <span id="badge-loudness" class="text-telemetry-label text-primary bg-surface-container-lowest border border-outline-variant/40 px-2 py-0.5 rounded text-[11px]">
+                -5.4 dB
+              </span>
+            </div>
+            <input id="slider-loudness" class="w-full" max="0" min="-60" step="0.1" type="range" value="-5.4"/>
+          </div>
+
+          <!-- 4. Acousticness -->
+          <div class="bg-surface-container/60 border border-outline-variant/20 rounded-xl p-3 space-y-2 hover:border-outline-variant/50 transition-all">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-1.5 text-body-sm font-medium text-white">
+                <span class="material-symbols-outlined text-tertiary text-[18px]">piano</span>
+                Acousticness
+              </label>
+              <span id="badge-acousticness" class="text-telemetry-label text-tertiary bg-surface-container-lowest border border-outline-variant/40 px-2 py-0.5 rounded text-[11px]">
+                0.12
+              </span>
+            </div>
+            <input id="slider-acousticness" class="w-full" max="1" min="0" step="0.01" type="range" value="0.12"/>
+          </div>
+
+          <!-- 5. Instrumentalness -->
+          <div class="bg-surface-container/60 border border-outline-variant/20 rounded-xl p-3 space-y-2 hover:border-outline-variant/50 transition-all">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-1.5 text-body-sm font-medium text-white">
+                <span class="material-symbols-outlined text-on-surface-variant text-[18px]">mic</span>
+                Instrumentalness
+              </label>
+              <span id="badge-instrumentalness" class="text-telemetry-label text-on-surface-variant bg-surface-container-lowest border border-outline-variant/40 px-2 py-0.5 rounded text-[11px]">
+                0.04
+              </span>
+            </div>
+            <input id="slider-instrumentalness" class="w-full" max="1" min="0" step="0.01" type="range" value="0.04"/>
+          </div>
+
+          <!-- 6. Valence (Positivity) -->
+          <div class="bg-surface-container/60 border border-outline-variant/20 rounded-xl p-3 space-y-2 hover:border-outline-variant/50 transition-all">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-1.5 text-body-sm font-medium text-white">
+                <span class="material-symbols-outlined text-primary text-[18px]">mood</span>
+                Valence
+              </label>
+              <span id="badge-valence" class="text-telemetry-label text-primary bg-surface-container-lowest border border-outline-variant/40 px-2 py-0.5 rounded text-[11px]">
+                0.68
+              </span>
+            </div>
+            <input id="slider-valence" class="w-full" max="1" min="0" step="0.01" type="range" value="0.68"/>
+          </div>
+
+          <!-- 7. Tempo (BPM) -->
+          <div class="bg-surface-container/60 border border-outline-variant/20 rounded-xl p-3 space-y-2 hover:border-outline-variant/50 transition-all">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-1.5 text-body-sm font-medium text-white">
+                <span class="material-symbols-outlined text-secondary text-[18px]">timer</span>
+                Tempo (BPM)
+              </label>
+              <span id="badge-tempo" class="text-telemetry-label text-secondary bg-surface-container-lowest border border-outline-variant/40 px-2 py-0.5 rounded text-[11px]">
+                126 BPM
+              </span>
+            </div>
+            <input id="slider-tempo" class="w-full" max="220" min="60" step="1" type="range" value="126"/>
+          </div>
+
+          <!-- 8. Speechiness -->
+          <div class="bg-surface-container/60 border border-outline-variant/20 rounded-xl p-3 space-y-2 hover:border-outline-variant/50 transition-all">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-1.5 text-body-sm font-medium text-white">
+                <span class="material-symbols-outlined text-tertiary text-[18px]">record_voice_over</span>
+                Speechiness
+              </label>
+              <span id="badge-speechiness" class="text-telemetry-label text-tertiary bg-surface-container-lowest border border-outline-variant/40 px-2 py-0.5 rounded text-[11px]">
+                0.08
+              </span>
+            </div>
+            <input id="slider-speechiness" class="w-full" max="1" min="0" step="0.01" type="range" value="0.08"/>
+          </div>
+
+          <!-- 9. Genre & Key Selector -->
+          <div class="bg-surface-container/60 border border-outline-variant/20 rounded-xl p-3 space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-1.5 text-body-sm font-medium text-white">
+                <span class="material-symbols-outlined text-primary text-[18px]">music_note</span>
+                Genre &amp; Harmonic Key
+              </label>
+              <span id="keyModeBadge" class="text-telemetry-label text-primary bg-surface-container-lowest border border-outline-variant/40 px-2 py-0.5 rounded text-[11px]">
+                Pop • C# Maj
+              </span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <select id="select-genre" class="bg-surface-container-low border border-outline-variant/40 rounded-lg px-2.5 py-1.5 text-body-sm text-white focus:outline-none focus:border-primary">
+                <option value="pop" selected>Pop</option>
+                <option value="dance">Dance / EDM</option>
+                <option value="hip-hop">Hip-Hop</option>
+                <option value="rock">Rock</option>
+                <option value="indie">Indie</option>
+                <option value="r-n-b">R&amp;B</option>
+                <option value="latin">Latin</option>
+                <option value="acoustic">Acoustic / Folk</option>
+              </select>
+              <select id="select-key" class="bg-surface-container-low border border-outline-variant/40 rounded-lg px-2.5 py-1.5 text-body-sm text-white focus:outline-none focus:border-primary">
+                <option value="0">C Major</option>
+                <option value="1" selected>C# Major</option>
+                <option value="2">D Major</option>
+                <option value="5">F Major</option>
+                <option value="7">G Major</option>
+                <option value="9">A Minor</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 10. Explicit Content Flagging -->
+          <div class="bg-surface-container/60 border border-outline-variant/20 rounded-xl p-3 flex items-center justify-between">
+            <div class="flex items-center gap-1.5 text-body-sm font-medium text-white">
+              <span class="material-symbols-outlined text-error text-[18px]">explicit</span>
+              Explicit Lyrics Flag
+            </div>
+            <div class="flex items-center gap-3">
+              <span id="badge-explicit" class="text-telemetry-label text-on-surface-variant bg-surface-container-lowest border border-outline-variant/30 px-2 py-0.5 rounded text-[11px]">
+                CLEAN (OFF)
+              </span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input id="toggle-explicit" class="sr-only peer" type="checkbox"/>
+                <div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Audio Player & Official Spotify Player Container -->
+        <div class="mt-space-md pt-space-md border-t border-outline-variant/20 bg-surface-container-lowest/60 rounded-xl p-3.5 border border-outline-variant/30 space-y-3">
+          
+          <!-- Player Mode Switcher Tabs -->
+          <div class="flex items-center justify-between border-b border-outline-variant/20 pb-2">
+            <div class="flex items-center gap-2">
+              <button id="tabWaveformBtn" class="px-3 py-1 rounded-full text-caption font-semibold bg-surface-container-high text-primary border border-primary/40 flex items-center gap-1.5 transition-all">
+                <span class="material-symbols-outlined text-[14px]">graphic_eq</span>
+                <span>Studio Audio Waveform</span>
+              </button>
+              <button id="tabSpotifyEmbedBtn" class="px-3 py-1 rounded-full text-caption font-normal text-on-surface-variant hover:text-white bg-transparent hover:bg-surface-container border border-outline-variant/30 flex items-center gap-1.5 transition-all">
+                <svg class="w-3.5 h-3.5 fill-current text-primary" viewBox="0 0 24 24"><path d="M12 0C5.372 0 0 5.372 0 12c0 6.626 5.372 12 12 12 6.626 0 12-5.374 12-12 0-6.628-5.374-12-12-12zm5.508 17.306c-.218.356-.68.472-1.036.254-2.836-1.732-6.406-2.124-10.61-1.164-.406.094-.808-.162-.902-.568-.094-.404.162-.806.568-.9 4.606-1.054 8.564-.606 11.726 1.342.356.218.472.68.254 1.036zm1.47-3.266c-.276.446-.86.588-1.306.312-3.244-1.994-8.192-2.57-12.03-1.404-.5.152-1.03-.134-1.182-.634-.152-.5.134-1.03.634-1.182 4.388-1.332 9.838-.688 13.572 1.602.446.276.588.86.312 1.306zm.126-3.41c-3.89-2.31-10.31-2.524-14.032-1.394-.596.182-1.228-.158-1.41-.754-.182-.596.158-1.228.754-1.41 4.282-1.3 11.368-1.044 15.844 1.614.536.318.71 1.012.392 1.548-.318.536-1.012.71-1.548.396z"/></svg>
+                <span>Official Spotify Player</span>
+              </button>
+            </div>
+            <span id="lufsBadge" class="text-telemetry-label text-primary text-[11px]">RMS: -11.2 LUFS</span>
+          </div>
+
+          <!-- View 1: Studio Audio Waveform Player -->
+          <div id="waveformView" class="space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 min-w-0">
+                <button id="audioPlayToggle" class="w-8 h-8 rounded-full bg-primary text-surface-container-lowest flex items-center justify-center hover:scale-105 active:scale-95 transition-transform shrink-0" title="Play/Pause Audio">
+                  <span class="material-symbols-outlined text-[18px]">play_arrow</span>
+                </button>
+                <div class="min-w-0">
+                  <div id="playerTrackTitle" class="text-caption text-white font-bold truncate">Studio Synthesizer Preview</div>
+                  <div id="playerArtistName" class="text-[11px] text-on-surface-variant truncate">Procedural Audio Engine</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 shrink-0">
+                <span id="audioTimeDisplay" class="text-caption font-telemetry-label text-on-surface-variant">0:00 / 0:30</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[16px] text-on-surface-variant">volume_up</span>
+                  <input id="audioVolumeSlider" type="range" min="0" max="1" step="0.05" value="0.8" class="w-16 h-1 accent-primary cursor-pointer"/>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive Audio Progress Scrubber -->
+            <div id="audioProgressBar" class="audio-progress-bar w-full">
+              <div id="audioProgressFill" class="audio-progress-fill"></div>
+            </div>
+
+            <!-- Real-time Frequency Waveform Bars -->
+            <div id="waveformContainer" class="h-10 w-full flex items-end gap-[3px] px-1 overflow-hidden pt-1">
+              <!-- Dynamically populated frequency bars -->
+            </div>
+          </div>
+
+          <!-- View 2: Official Spotify Web Player Embed -->
+          <div id="spotifyEmbedView" class="hidden">
+            <div class="rounded-xl overflow-hidden border border-outline-variant/30 bg-surface-container-lowest shadow-inner">
+              <iframe id="spotifyPlayerIframe" style="border-radius:12px; height:80px; width:100%;" src="https://open.spotify.com/embed/track/5SuOikwiRyPMVoIQDJUgSV?utm_source=generator&theme=0" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-on-surface-variant mt-2 px-1">
+              <span>Streaming via Spotify Web API Player</span>
+              <a id="spotifyDirectLink" href="https://open.spotify.com" target="_blank" class="text-primary hover:underline flex items-center gap-1">
+                <span>Open in Full Spotify App</span>
+                <span class="material-symbols-outlined text-[12px]">open_in_new</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- RIGHT PANEL: PREDICTION RESULT CARD (5 Columns) -->
+      <section class="xl:col-span-5 bg-gradient-to-b from-surface-container-high/90 to-surface-container-lowest/90 border border-primary/30 rounded-2xl p-space-lg shadow-2xl relative backdrop-blur-xl glow-emerald-ring flex flex-col justify-between">
+        <!-- Header Info & Model Validation Credentials -->
+        <div class="flex items-center justify-between pb-space-sm border-b border-outline-variant/20">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></span>
+            <span class="text-telemetry-label text-white uppercase tracking-wider text-[11px]">XGBoost Inference Engine</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="completenessBadge" class="completeness-badge completeness-full">
+              <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              <span id="completenessText">15/15 Features Validated</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Central Radial Popularity Gauge -->
+        <div class="my-space-md flex flex-col items-center justify-center text-center">
+          <div class="relative w-48 h-48 flex items-center justify-center">
+            <!-- SVG Concentric Circular Gauge -->
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+              <!-- Background Outer Track -->
+              <circle cx="60" cy="60" fill="transparent" r="50" stroke="#242424" stroke-width="8"></circle>
+              <!-- Animated Glowing Progress Path -->
+              <circle id="gaugeProgressCircle" class="transition-all duration-700 ease-out" cx="60" cy="60" fill="transparent" r="50" stroke="url(#emeraldGradient)" stroke-dasharray="314.15" stroke-dashoffset="50.2" stroke-linecap="round" stroke-width="8"></circle>
+              <defs>
+                <linearGradient id="emeraldGradient" x1="0%" x2="100%" y1="0%" y2="100%">
+                  <stop offset="0%" stop-color="#1DB954"></stop>
+                  <stop offset="100%" stop-color="#3de96f"></stop>
+                </linearGradient>
+              </defs>
+            </svg>
+            <!-- Center Metric Values -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="popularityScoreNumber" class="text-[54px] font-extrabold font-telemetry-metric text-white leading-none tracking-tighter drop-shadow-[0_0_12px_rgba(83,224,118,0.7)]">
+                --
+              </span>
+              <span class="text-caption text-on-surface-variant font-medium mt-1">
+                PREDICTED POPULARITY / 100
+              </span>
+            </div>
+          </div>
+
+          <!-- Popularity Verdict Badge -->
+          <div id="verdictBadge" class="mt-3 inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/20 border border-primary/50 text-primary text-body-sm font-semibold">
+            <span class="material-symbols-outlined text-[16px]">auto_awesome</span>
+            <span>Evaluating Model...</span>
+          </div>
+          
+          <!-- Prediction Uncertainty & Validation Metrics Box -->
+          <div class="mt-2.5 ci-interval-box w-full max-w-sm">
+            <div class="flex items-center justify-between text-caption font-telemetry-label">
+              <span class="text-on-surface-variant">95% Confidence Interval:</span>
+              <strong id="confidenceIntervalText" class="text-primary font-bold">-- - -- pts</strong>
+            </div>
+            <div class="flex items-center justify-between text-[11px] font-caption text-on-surface-variant/80 mt-1 border-t border-outline-variant/20 pt-1">
+              <span>Model Test Metrics:</span>
+              <span class="text-white">R² = <strong class="text-primary">0.403</strong> • MAE = <strong class="text-primary">±10.63</strong> • RMSE = <strong class="text-primary">15.12</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3-Way Streaming Telemetry Metrics Grid -->
+        <div class="grid grid-cols-3 gap-2.5 my-space-sm bg-surface-container-lowest/80 border border-outline-variant/30 rounded-xl p-3 text-center">
+          <div class="space-y-1">
+            <div class="text-[10px] font-telemetry-label text-on-surface-variant uppercase">30s Skip Risk</div>
+            <div id="skipRateMetric" class="text-body-md font-bold text-white font-telemetry-metric">--%</div>
+            <div id="skipQualityBadge" class="text-[10px] font-caption text-primary">Dynamic Estimation</div>
+          </div>
+          <div class="space-y-1 border-x border-outline-variant/30 px-1">
+            <div class="text-[10px] font-telemetry-label text-on-surface-variant uppercase">Est. Completion</div>
+            <div id="completionRateMetric" class="text-body-md font-bold text-secondary font-telemetry-metric">--%</div>
+            <div class="text-[10px] font-caption text-on-surface-variant">Stream retention</div>
+          </div>
+          <div class="space-y-1">
+            <div class="text-[10px] font-telemetry-label text-on-surface-variant uppercase">Top Playlist Fit</div>
+            <div id="playlistMatchMetric" class="text-body-md font-bold text-tertiary">Pop Rising</div>
+            <div id="streamCompMetric" class="text-[10px] font-caption text-primary">Algorithmic alignment</div>
+          </div>
+        </div>
+
+        <!-- Sonic Radar Profile Chart (Track vs Global Top 50 Avg) -->
+        <div class="bg-surface-container-lowest/60 border border-outline-variant/20 rounded-xl p-3 mt-space-xs">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-caption font-semibold text-white">Sonic Fingerprint Radar</span>
+            <div class="flex items-center gap-3 text-[10px] font-caption">
+              <span class="flex items-center gap-1 text-primary">
+                <span class="w-2.5 h-2.5 rounded-sm bg-primary/40 border border-primary"></span>
+                This Track
+              </span>
+              <span class="flex items-center gap-1 text-on-surface-variant">
+                <span class="w-2.5 h-0.5 border-t border-dashed border-outline"></span>
+                Global Top 50 Avg
+              </span>
+            </div>
+          </div>
+
+          <!-- Radar SVG Canvas -->
+          <div class="w-full h-36 flex items-center justify-center">
+            <svg class="w-full h-full max-h-36 overflow-visible" viewBox="0 0 200 200">
+              <!-- Concentric Polygonal Web Grid -->
+              <polygon fill="none" points="100,20 169,60 169,140 100,180 31,140 31,60" stroke="#2a2a2a" stroke-width="1"></polygon>
+              <polygon fill="none" points="100,45 145,71 145,129 100,155 55,129 55,71" stroke="#222222" stroke-width="1"></polygon>
+              
+              <!-- Radial Axis Lines -->
+              <line stroke="#2e2e2e" stroke-width="1" x1="100" x2="100" y1="100" y2="20"></line>
+              <line stroke="#2e2e2e" stroke-width="1" x1="100" x2="169" y1="100" y2="60"></line>
+              <line stroke="#2e2e2e" stroke-width="1" x1="100" x2="169" y1="100" y2="140"></line>
+              <line stroke="#2e2e2e" stroke-width="1" x1="100" x2="100" y1="100" y2="180"></line>
+              <line stroke="#2e2e2e" stroke-width="1" x1="100" x2="31" y1="100" y2="140"></line>
+              <line stroke="#2e2e2e" stroke-width="1" x1="100" x2="31" y1="100" y2="60"></line>
+              
+              <!-- Global Top 50 Avg (Benchmark polygon) -->
+              <polygon fill="rgba(255,255,255,0.03)" points="100,38 152,69 148,132 100,160 48,135 45,68" stroke="#869585" stroke-dasharray="3,3" stroke-width="1.5"></polygon>
+              
+              <!-- Current Track Fingerprint (Dynamic Emerald Polygon) -->
+              <polygon id="radarPolygon" class="drop-shadow-[0_0_8px_rgba(83,224,118,0.5)] transition-all duration-300" fill="rgba(83, 224, 118, 0.25)" points="100,26 160,65 142,126 100,146 39,132 40,62" stroke="#53e076" stroke-width="2"></polygon>
+              
+              <!-- Axis Labels -->
+              <text fill="#bccbb9" font-family="Plus Jakarta Sans" font-size="9" text-anchor="middle" x="100" y="14">Dance</text>
+              <text fill="#bccbb9" font-family="Plus Jakarta Sans" font-size="9" text-anchor="start" x="176" y="62">Energy</text>
+              <text fill="#bccbb9" font-family="Plus Jakarta Sans" font-size="9" text-anchor="start" x="176" y="145">Loudness</text>
+              <text fill="#bccbb9" font-family="Plus Jakarta Sans" font-size="9" text-anchor="middle" x="100" y="196">Tempo</text>
+              <text fill="#bccbb9" font-family="Plus Jakarta Sans" font-size="9" text-anchor="end" x="24" y="145">Acoustic</text>
+              <text fill="#bccbb9" font-family="Plus Jakarta Sans" font-size="9" text-anchor="end" x="24" y="62">Valence</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Model Footer Status Bar -->
+        <div class="mt-3 pt-3 border-t border-outline-variant/20 flex items-center justify-between">
+          <span class="text-caption text-on-surface-variant flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-primary"></span>
+            <span>Live Model Pipeline: <strong class="text-white">Active (Sub-2ms)</strong></span>
+          </span>
+          <a href="http://localhost:8501" target="_blank" class="text-body-sm text-primary hover:underline flex items-center gap-1 font-semibold">
+            Open Streamlit ML View
+            <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+          </a>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ==================== AUTOMATIC AUDIO SIGNAL ANALYSIS (LIBROSA DSP) ==================== -->
+    <section id="audio-dsp" class="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-space-lg shadow-2xl relative backdrop-blur-md space-y-space-md">
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between pb-space-sm border-b border-outline-variant/20 gap-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[22px]">graphic_eq</span>
+          <h2 class="text-title-md text-white font-bold">Audio Signal Analysis (Librosa DSP)</h2>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- Hidden Audio File Input -->
+          <input id="audioFileInput" type="file" accept=".wav,.mp3,.ogg,.flac,.m4a" class="hidden"/>
+          <button id="uploadAudioBtn" class="px-3 py-1.5 rounded-full bg-surface-container border border-outline-variant/40 hover:border-primary text-white text-caption font-semibold flex items-center gap-1.5 transition-all">
+            <span class="material-symbols-outlined text-[15px] text-primary">upload_file</span>
+            <span>Upload WAV/MP3</span>
+          </button>
+          <button id="runDspAnalysisBtn" class="px-3.5 py-1.5 rounded-full bg-primary hover:bg-primary-fixed text-on-primary text-caption font-bold flex items-center gap-1.5 transition-all shadow-md active:scale-95">
+            <span class="material-symbols-outlined text-[15px]">equalizer</span>
+            <span>Analyze Signal</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- DSP Telemetry 8-Metrics Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        
+        <!-- 1. Measured Tempo -->
+        <div class="dsp-stat-card space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="dsp-label">Librosa Tempo</span>
+            <span class="material-symbols-outlined text-[16px] text-primary">speed</span>
+          </div>
+          <div class="flex items-baseline gap-1.5">
+            <span id="dspTempoVal" class="dsp-value">124.0</span>
+            <span class="text-caption text-on-surface-variant font-mono">BPM</span>
+          </div>
+          <div id="dspBeatCount" class="text-[11px] text-on-surface-variant/80">32 detected beat frames</div>
+        </div>
+
+        <!-- 2. RMS Energy -->
+        <div class="dsp-stat-card space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="dsp-label">RMS Signal Energy</span>
+            <span class="material-symbols-outlined text-[16px] text-secondary">electric_bolt</span>
+          </div>
+          <div class="flex items-baseline gap-1.5">
+            <span id="dspRmsMeanVal" class="dsp-value">0.184</span>
+            <span class="text-caption text-on-surface-variant font-mono">RMS</span>
+          </div>
+          <div id="dspRmsPeak" class="text-[11px] text-on-surface-variant/80">Peak: 0.492 amplitude</div>
+        </div>
+
+        <!-- 3. Physical Loudness Estimate -->
+        <div class="dsp-stat-card space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="dsp-label">Estimated Loudness</span>
+            <span class="material-symbols-outlined text-[16px] text-primary">volume_up</span>
+          </div>
+          <div class="flex items-baseline gap-1.5">
+            <span id="dspLoudnessVal" class="dsp-value">-14.7</span>
+            <span class="text-caption text-on-surface-variant font-mono">dBFS</span>
+          </div>
+          <div class="text-[11px] text-on-surface-variant/80">20·log10(RMS) signal level</div>
+        </div>
+
+        <!-- 4. Spectral Centroid -->
+        <div class="dsp-stat-card space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="dsp-label">Spectral Centroid</span>
+            <span class="material-symbols-outlined text-[16px] text-tertiary">wb_sunny</span>
+          </div>
+          <div class="flex items-baseline gap-1.5">
+            <span id="dspCentroidVal" class="dsp-value">2,140</span>
+            <span class="text-caption text-on-surface-variant font-mono">Hz</span>
+          </div>
+          <div class="text-[11px] text-on-surface-variant/80">Perceived timbre brightness</div>
+        </div>
+
+        <!-- 5. Spectral Bandwidth -->
+        <div class="dsp-stat-card space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="dsp-label">Spectral Bandwidth</span>
+            <span class="material-symbols-outlined text-[16px] text-secondary">width</span>
+          </div>
+          <div class="flex items-baseline gap-1.5">
+            <span id="dspBandwidthVal" class="dsp-value">2,480</span>
+            <span class="text-caption text-on-surface-variant font-mono">Hz</span>
+          </div>
+          <div class="text-[11px] text-on-surface-variant/80">Frequency spread around center</div>
+        </div>
+
+        <!-- 6. Spectral Rolloff -->
+        <div class="dsp-stat-card space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="dsp-label">Spectral Rolloff (85%)</span>
+            <span class="material-symbols-outlined text-[16px] text-primary">vertical_align_top</span>
+          </div>
+          <div class="flex items-baseline gap-1.5">
+            <span id="dspRolloffVal" class="dsp-value">4,620</span>
+            <span class="text-caption text-on-surface-variant font-mono">Hz</span>
+          </div>
+          <div class="text-[11px] text-on-surface-variant/80">High-frequency acoustic ceiling</div>
+        </div>
+
+        <!-- 7. Zero Crossing Rate -->
+        <div class="dsp-stat-card space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="dsp-label">Zero Crossing Rate</span>
+            <span class="material-symbols-outlined text-[16px] text-tertiary">alt_route</span>
+          </div>
+          <div class="flex items-baseline gap-1.5">
+            <span id="dspZcrVal" class="dsp-value">0.082</span>
+            <span class="text-caption text-on-surface-variant font-mono">ZCR</span>
+          </div>
+          <div class="text-[11px] text-on-surface-variant/80">Transients &amp; noise floor</div>
+        </div>
+
+        <!-- 8. Rhythm Regularity Proxy -->
+        <div class="dsp-stat-card space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="dsp-label">Rhythm Regularity (Proxy)</span>
+            <span class="material-symbols-outlined text-[16px] text-primary">sync</span>
+          </div>
+          <div class="flex items-baseline gap-1.5">
+            <span id="dspRegularityVal" class="dsp-value">0.89</span>
+            <span class="text-caption text-on-surface-variant font-mono">Score</span>
+          </div>
+          <div class="text-[11px] text-on-surface-variant/80">Beat interval quantization stability</div>
+        </div>
+
+      </div>
+
+      <!-- DSP Signal Info Bar -->
+      <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-3.5 py-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-caption">
+        <div class="flex items-center gap-2 text-on-surface-variant text-[11px]">
+          <span class="material-symbols-outlined text-primary text-[17px]">info</span>
+          <span>Physical acoustic physics extracted via Librosa DSP engine. Compatible with normalized XGBoost inputs.</span>
+        </div>
+        <div class="shrink-0">
+          <span id="dspSignalSourceBadge" class="bg-surface-container px-2 py-0.5 rounded text-[10px] font-telemetry-label text-primary border border-outline-variant/30 uppercase">
+            Librosa 1.0 DSP
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SKIP PROBABILITY & LISTENING BEHAVIOR INTELLIGENCE ==================== -->
+    <section id="retention-intelligence" class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg">
+      
+      <!-- Left: Audience Retention & Skip Hazard Model (6 Columns) -->
+      <div class="xl:col-span-6 bg-surface-container-low border border-outline-variant/30 rounded-2xl p-space-lg shadow-xl space-y-space-md">
+        <div class="flex items-center justify-between border-b border-outline-variant/20 pb-2">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[20px]">timer</span>
+            <h3 class="text-white text-base font-bold">Audience Retention &amp; Skip Hazard</h3>
+          </div>
+          <span class="text-telemetry-label text-primary text-[11px]">Dynamic Model</span>
+        </div>
+
+        <!-- 30-Second Dropoff Curve Breakdown -->
+        <div class="grid grid-cols-2 gap-3 pt-1">
+          <div class="bg-surface-container/70 border border-outline-variant/30 rounded-xl p-3.5 space-y-1">
+            <div class="text-[10px] font-telemetry-label text-on-surface-variant uppercase">30-Second Skip Risk Index</div>
+            <div id="retentionSkipVal" class="text-[28px] font-extrabold font-telemetry-metric text-white">16.4%</div>
+            <p id="retentionSkipComment" class="text-[11px] text-primary">Top 8% Streaming Retention Tier</p>
+          </div>
+          <div class="bg-surface-container/70 border border-outline-variant/30 rounded-xl p-3.5 space-y-1">
+            <div class="text-[10px] font-telemetry-label text-on-surface-variant uppercase">Full Track Completion Rate</div>
+            <div id="retentionCompletionVal" class="text-[28px] font-extrabold font-telemetry-metric text-secondary">78.6%</div>
+            <p class="text-[11px] text-on-surface-variant">Estimated complete plays</p>
+          </div>
+        </div>
+
+        <!-- Retention Curve Visualizer -->
+        <div class="space-y-2 pt-1">
+          <div class="flex justify-between text-caption font-semibold text-white">
+            <span>Estimated Audience Retention Curve (Play Timeline)</span>
+            <span class="text-primary font-mono text-[11px]">Streaming Cohort</span>
+          </div>
+          <div class="space-y-2 bg-surface-container-lowest/60 border border-outline-variant/20 rounded-xl p-3">
+            <div class="space-y-1">
+              <div class="flex justify-between text-[11px] text-on-surface-variant">
+                <span>0s - 10s (Intro Hook Arrival)</span>
+                <span id="retention10s" class="text-white font-mono">94%</span>
+              </div>
+              <div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+                <div id="bar10s" class="bg-primary h-full rounded-full" style="width: 94%;"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-[11px] text-on-surface-variant">
+                <span>10s - 30s (Algorithmic Skip Threshold)</span>
+                <span id="retention30s" class="text-primary font-mono font-bold">83.6%</span>
+              </div>
+              <div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+                <div id="bar30s" class="bg-primary h-full rounded-full" style="width: 83.6%;"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-[11px] text-on-surface-variant">
+                <span>30s - 60s (Chorus Lock-in)</span>
+                <span id="retention60s" class="text-white font-mono">79.2%</span>
+              </div>
+              <div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+                <div id="bar60s" class="bg-secondary h-full rounded-full" style="width: 79.2%;"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-[11px] text-on-surface-variant">
+                <span>Full Length (Outro Completion)</span>
+                <span id="retentionFull" class="text-white font-mono">71.0%</span>
+              </div>
+              <div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+                <div id="barFull" class="bg-tertiary h-full rounded-full" style="width: 71%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Listening Contexts & Archetype Affinities (6 Columns) -->
+      <div class="xl:col-span-6 bg-surface-container-low border border-outline-variant/30 rounded-2xl p-space-lg shadow-xl space-y-space-md flex flex-col justify-between">
+        <div class="flex items-center justify-between border-b border-outline-variant/20 pb-2">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-[20px]">headphones</span>
+            <h3 class="text-white text-base font-bold">Listening Context Classification</h3>
+          </div>
+          <span class="text-telemetry-label text-secondary text-[11px]">Context Fit</span>
+        </div>
+
+        <!-- 5 Context Affinity Meters -->
+        <div class="space-y-3 pt-1">
+          
+          <!-- Context 1: Cardio / Workout -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-body-sm">
+              <span class="text-white font-medium flex items-center gap-1.5">
+                <span>🏃</span>
+                <span>Cardio / High-Intensity Workout</span>
+              </span>
+              <span id="ctxWorkoutVal" class="text-primary font-mono font-bold text-caption">88%</span>
+            </div>
+            <div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+              <div id="ctxWorkoutBar" class="context-meter-fill" style="width: 88%;"></div>
+            </div>
+          </div>
+
+          <!-- Context 2: Club / Party / Festival -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-body-sm">
+              <span class="text-white font-medium flex items-center gap-1.5">
+                <span>🎉</span>
+                <span>Club / Mainstage Party</span>
+              </span>
+              <span id="ctxPartyVal" class="text-secondary font-mono font-bold text-caption">92%</span>
+            </div>
+            <div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+              <div id="ctxPartyBar" class="context-meter-fill" style="width: 92%;"></div>
+            </div>
+          </div>
+
+          <!-- Context 3: Focus / Deep Work / Study -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-body-sm">
+              <span class="text-white font-medium flex items-center gap-1.5">
+                <span>🧠</span>
+                <span>Deep Focus / Study / Coding</span>
+              </span>
+              <span id="ctxFocusVal" class="text-tertiary font-mono font-bold text-caption">24%</span>
+            </div>
+            <div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+              <div id="ctxFocusBar" class="context-meter-fill" style="width: 24%;"></div>
+            </div>
+          </div>
+
+          <!-- Context 4: Late-Night Chill / Moody -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-body-sm">
+              <span class="text-white font-medium flex items-center gap-1.5">
+                <span>🌙</span>
+                <span>Late-Night Chill / Moody Ambient</span>
+              </span>
+              <span id="ctxChillVal" class="text-on-surface font-mono font-bold text-caption">38%</span>
+            </div>
+            <div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+              <div id="ctxChillBar" class="context-meter-fill" style="width: 38%;"></div>
+            </div>
+          </div>
+
+          <!-- Context 5: Highway Commute -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-body-sm">
+              <span class="text-white font-medium flex items-center gap-1.5">
+                <span>🚗</span>
+                <span>Highway Commute / Road Trip</span>
+              </span>
+              <span id="ctxCommuteVal" class="text-primary font-mono font-bold text-caption">76%</span>
+            </div>
+            <div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+              <div id="ctxCommuteBar" class="context-meter-fill" style="width: 76%;"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="text-[11px] text-on-surface-variant/80 border-t border-outline-variant/20 pt-2 flex items-center justify-between">
+          <span>Inferred from Danceability, Energy, Valence &amp; Acousticness</span>
+          <span class="text-primary font-semibold">Algorithmic Playlist Matrix</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== LOWER SECTION: CORRELATION INSIGHTS ==================== -->
+    <section id="correlation" class="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+      
+      <!-- Card 1: Hit Probability Drivers -->
+      <div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-space-lg shadow-xl space-y-space-md">
+        <div class="flex items-center justify-between border-b border-outline-variant/20 pb-2">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[20px]">trending_up</span>
+            <h3 class="text-white text-base font-bold">Hit Probability Drivers</h3>
+          </div>
+          <span class="text-telemetry-label text-primary text-[11px]">SHAP Values</span>
+        </div>
+
+
+        <div class="space-y-3 pt-1">
+          <div class="space-y-1">
+            <div class="flex justify-between text-body-sm">
+              <span class="text-white font-medium">Danceability + Energy Core</span>
+              <span class="text-primary font-telemetry-metric font-bold text-sm">+18.4 pts</span>
+            </div>
+            <div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+              <div class="bg-primary h-full rounded-full" style="width: 86%;"></div>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex justify-between text-body-sm">
+              <span class="text-white font-medium">Radio Loudness Compression (-5dB)</span>
+              <span class="text-secondary font-telemetry-metric font-bold text-sm">+12.1 pts</span>
+            </div>
+            <div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+              <div class="bg-secondary h-full rounded-full" style="width: 65%;"></div>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex justify-between text-body-sm">
+              <span class="text-white font-medium">Tempo Cadence Alignment (126 BPM)</span>
+              <span class="text-tertiary font-telemetry-metric font-bold text-sm">+7.8 pts</span>
+            </div>
+            <div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+              <div class="bg-tertiary h-full rounded-full" style="width: 44%;"></div>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex justify-between text-body-sm">
+              <span class="text-white font-medium">Explicit Advisory Moderation</span>
+              <span class="text-primary font-telemetry-metric font-bold text-sm">+3.2 pts</span>
+            </div>
+            <div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+              <div class="bg-primary/80 h-full rounded-full" style="width: 25%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Correlation Matrix Heatmap -->
+      <div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-space-lg shadow-xl space-y-space-md">
+        <div class="flex items-center justify-between border-b border-outline-variant/20 pb-2">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-[20px]">grid_view</span>
+            <h3 class="text-white text-base font-bold">Correlation Matrix</h3>
+          </div>
+          <span class="text-telemetry-label text-secondary text-[11px]">Pearson r</span>
+        </div>
+
+
+        <!-- Mini Heatmap Grid -->
+        <div class="grid grid-cols-4 gap-1.5 text-center text-caption pt-1 font-telemetry-label">
+          <div></div>
+          <div class="text-[10px] text-on-surface-variant">Dance</div>
+          <div class="text-[10px] text-on-surface-variant">Energy</div>
+          <div class="text-[10px] text-on-surface-variant">Loud</div>
+
+          <!-- Row 1: Dance -->
+          <div class="text-[10px] text-left text-on-surface-variant self-center">Dance</div>
+          <div class="bg-primary/90 text-surface-container-lowest p-2 rounded font-bold">1.00</div>
+          <div class="bg-primary/40 text-white p-2 rounded">0.42</div>
+          <div class="bg-primary/30 text-white p-2 rounded">0.31</div>
+
+          <!-- Row 2: Energy -->
+          <div class="text-[10px] text-left text-on-surface-variant self-center">Energy</div>
+          <div class="bg-primary/40 text-white p-2 rounded">0.42</div>
+          <div class="bg-primary/90 text-surface-container-lowest p-2 rounded font-bold">1.00</div>
+          <div class="bg-primary/80 text-surface-container-lowest p-2 rounded font-bold">0.82</div>
+
+          <!-- Row 3: Loudness -->
+          <div class="text-[10px] text-left text-on-surface-variant self-center">Loud</div>
+          <div class="bg-primary/30 text-white p-2 rounded">0.31</div>
+          <div class="bg-primary/80 text-surface-container-lowest p-2 rounded font-bold">0.82</div>
+          <div class="bg-primary/90 text-surface-container-lowest p-2 rounded font-bold">1.00</div>
+        </div>
+
+        <div class="flex items-center justify-between text-[11px] font-caption text-on-surface-variant border-t border-outline-variant/20 pt-2">
+          <span class="text-primary font-semibold">Strong Positive (&gt;0.8)</span>
+          <span class="text-tertiary">Moderate (0.3-0.5)</span>
+          <span class="text-error">Inverse (-0.4)</span>
+        </div>
+      </div>
+
+      <!-- Card 3: Actionable Optimization Recommendations -->
+      <div id="insights" class="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-space-lg shadow-xl space-y-space-md">
+        <div class="flex items-center justify-between border-b border-outline-variant/20 pb-2">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[20px]">smart_toy</span>
+            <h3 class="text-white text-base font-bold">Actionable Optimization</h3>
+          </div>
+          <span class="text-caption bg-surface-container px-2 py-0.5 rounded text-white border border-outline-variant/40">3 Prescriptions</span>
+        </div>
+
+        <div class="space-y-2.5">
+          <div class="bg-surface-container/70 border border-primary/30 hover:border-primary p-3 rounded-xl transition-all cursor-pointer">
+            <div class="flex items-start gap-2">
+              <span class="text-base">⚡</span>
+              <div>
+                <div class="text-body-sm font-semibold text-white">Lift Valence +0.12 for Peak Euphoria</div>
+                <p class="text-caption text-on-surface-variant mt-0.5">
+                  Matches Global Top 40 euphoria benchmarks. Estimated gain: <strong class="text-primary">+4.2 Popularity pts</strong>.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-surface-container/70 border border-outline-variant/30 hover:border-outline p-3 rounded-xl transition-all cursor-pointer">
+            <div class="flex items-start gap-2">
+              <span class="text-base">🔊</span>
+              <div>
+                <div class="text-body-sm font-semibold text-white">Back Off Master Limiter by 0.6 dB</div>
+                <p class="text-caption text-on-surface-variant mt-0.5">
+                  Preserves dynamic punch for festival rig playout without triggering Spotify's -14 LUFS penalty.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-surface-container/70 border border-outline-variant/30 hover:border-outline p-3 rounded-xl transition-all cursor-pointer">
+            <div class="flex items-start gap-2">
+              <span class="text-base">🎯</span>
+              <div>
+                <div class="text-body-sm font-semibold text-white">Optimal Release Window: Thu 23:00 EST</div>
+                <p class="text-caption text-on-surface-variant mt-0.5">
+                  Maximizes first 12-hour algorithmic indexing for New Music Friday flagship playlist inclusion.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="w-full mt-space-xl py-space-md border-t border-outline-variant/20 bg-surface-container-lowest text-center">
+    <div class="max-w-[1720px] mx-auto px-margin-desktop flex flex-col sm:flex-row items-center justify-between text-caption text-on-surface-variant gap-2">
+      <div class="flex items-center gap-2">
+        <span class="text-white font-semibold">Spotify SoundLab</span>
+        <span>• Machine Learning Audio Intelligence • Production Ready</span>
+      </div>
+      <div>
+        Designed with Stitch • XGBoost Model Pipeline • ANTIGRAVITY IDE
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== STICKY BOTTOM SPOTIFY SOUNDLAB DOCK ==================== -->
+  <div id="spotifyDock" class="fixed bottom-0 left-0 right-0 z-40 bg-surface-container-lowest/95 backdrop-blur-2xl border-t border-outline-variant/40 px-margin-desktop py-2.5 flex items-center justify-between gap-4 transition-all">
+    <div class="flex items-center gap-3 min-w-0 max-w-sm">
+      <div id="dockArtwork" class="w-11 h-11 rounded-lg bg-surface-container-high border border-outline-variant/40 flex items-center justify-center shrink-0 overflow-hidden shadow">
+        <span class="material-symbols-outlined text-primary text-[22px]">music_note</span>
+      </div>
+      <div class="min-w-0">
+        <div id="dockTrackTitle" class="text-body-sm font-bold text-white truncate">Select or Search any Spotify Track</div>
+        <div id="dockArtistName" class="text-caption text-on-surface-variant truncate">Click search to explore 114k catalogue</div>
+      </div>
+    </div>
+
+    <!-- Central Audio Transport Controls -->
+    <div class="flex flex-col items-center gap-1.5 flex-1 max-w-xl">
+      <div class="flex items-center gap-4">
+        <button id="dockPrevBtn" class="text-on-surface-variant hover:text-white transition-colors" title="Previous Preset">
+          <span class="material-symbols-outlined text-[20px]">skip_previous</span>
+        </button>
+        <button id="dockPlayBtn" class="w-9 h-9 rounded-full bg-primary hover:bg-primary-fixed text-surface-container-lowest flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all" title="Play / Pause">
+          <span class="material-symbols-outlined text-[20px]">play_arrow</span>
+        </button>
+        <button id="dockNextBtn" class="text-on-surface-variant hover:text-white transition-colors" title="Next Preset">
+          <span class="material-symbols-outlined text-[20px]">skip_next</span>
+        </button>
+      </div>
+      <div class="flex items-center gap-2 w-full">
+        <span id="dockCurrentTime" class="text-[11px] font-telemetry-label text-on-surface-variant">0:00</span>
+        <div id="dockProgressBar" class="audio-progress-bar flex-1">
+          <div id="dockProgressFill" class="audio-progress-fill"></div>
+        </div>
+        <span id="dockTotalTime" class="text-[11px] font-telemetry-label text-on-surface-variant">0:30</span>
+      </div>
+    </div>
+
+    <!-- Right Spotify Actions & Volume -->
+    <div class="flex items-center gap-3 shrink-0">
+      <a id="dockSpotifyLink" href="https://open.spotify.com" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1ed760]/20 hover:bg-[#1ed760]/30 border border-[#1ed760]/50 text-[#1ed760] text-caption font-semibold transition-all">
+        <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24"><path d="M12 0C5.372 0 0 5.372 0 12c0 6.626 5.372 12 12 12 6.626 0 12-5.374 12-12 0-6.628-5.374-12-12-12zm5.508 17.306c-.218.356-.68.472-1.036.254-2.836-1.732-6.406-2.124-10.61-1.164-.406.094-.808-.162-.902-.568-.094-.404.162-.806.568-.9 4.606-1.054 8.564-.606 11.726 1.342.356.218.472.68.254 1.036zm1.47-3.266c-.276.446-.86.588-1.306.312-3.244-1.994-8.192-2.57-12.03-1.404-.5.152-1.03-.134-1.182-.634-.152-.5.134-1.03.634-1.182 4.388-1.332 9.838-.688 13.572 1.602.446.276.588.86.312 1.306zm.126-3.41c-3.89-2.31-10.31-2.524-14.032-1.394-.596.182-1.228-.158-1.41-.754-.182-.596.158-1.228.754-1.41 4.282-1.3 11.368-1.044 15.844 1.614.536.318.71 1.012.392 1.548-.318.536-1.012.71-1.548.396z"/></svg>
+        <span>Open Spotify</span>
+      </a>
+      <button id="dockCloseBtn" class="text-on-surface-variant hover:text-white p-1 rounded transition-colors" title="Dismiss Dock">
+        <span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
+      </button>
+    </div>
+  </div>
+
+</body>
+</html>

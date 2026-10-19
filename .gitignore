@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment Variables and Local Secrets
+.env
+.env.local
+.env.*.local
+
+# Streamlit secrets and local configs
+.streamlit/secrets.toml
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Virtual Environments
+venv/
+env/
+.venv/
+ENV/
+
+# Operating System & IDE caches
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.agent/
+.agents/
+.gemini/
+
+# Logs
+*.log
